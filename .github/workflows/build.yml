@@ -1,0 +1,56 @@
+name: Build APK
+
+# 触发时机：
+#   1) 推代码到 main
+#   2) 打 tag（如 v1.0.1）—— 会自动把 APK 附到 Release 上
+#   3) 别人提 PR
+#   4) 手动点一下（Actions 页面 → Run workflow）
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: 安装 Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 安装 Gradle 7.6
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '7.6'
+
+      # 不依赖 gradlew：工程里没带 gradle-wrapper.jar 也能编
+      - name: 编译 debug APK
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreecessWhitelist-debug
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: 打 tag 时自动发布 Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/debug/*.apk
+          generate_release_notes: true
