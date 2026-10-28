@@ -31,6 +31,8 @@ jobs:
 
       - name: 安装 Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packeges: platform-tools
 
       - name: 安装 Gradle 7.6
         uses: gradle/actions/setup-gradle@v3
