@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- LSPosed 读取这个数组作为默认作用域；"android" = 系统框架(system_server) -->
+    <string-array name="xposed_scope">
+        <item>android</item>
+    </string-array>
+</resources>

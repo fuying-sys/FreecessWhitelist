@@ -1,0 +1,21 @@
+// 工程入口：仓库地址集中在这里声明，子模块不要重复声明
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // Xposed API 的官方仓库，compileOnly 依赖从这里下载
+        maven { url 'https://api.xposed.info/' }
+    }
+}
+
+rootProject.name = "FreecessWhitelist"
+include ':app'

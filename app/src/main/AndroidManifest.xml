@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    这是一个纯 Xposed / LSPosed 模块，没有任何界面：
+    · 没有 launcher Activity —— 装完后在 LSPosed 管理器的“模块”列表里启用即可；
+    · xposedscope 只声明 android（系统框架 / system_server），
+      避免被误注入到普通 App 进程里。
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="false"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+
+        <!-- ===== Xposed 模块元数据 ===== -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="拦截三星 Freecess 机制对指定应用（VPNHotspot / Clash）的冻结，其余应用照常放行。" />
+        <!--
+            xposedminversion 用 82：这是“经典 Xposed API”的基准版本。
+            写 93 会让 1.8.3 之前的 LSPosed（或部分 ROM 内置版）报“模块需要更新的框架”；
+            82 对 LSPosed 1.8.3 / 1.9.x 都兼容，本模块也只用到 82 的接口。
+        -->
+        <meta-data
+            android:name="xposedminversion"
+            android:value="82" />
+
+        <!-- 作用域：只勾选「系统框架」(android) 即可，也就是 system_server -->
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/xposed_scope" />
+
+    </application>
+</manifest>
